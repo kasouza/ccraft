@@ -10,7 +10,7 @@ const char *s_error_messages[CCRAFTE_ERROR_LAST] = {
     [CCRAFTE_ERROR_FRAMEBUFFER_CREATION] = "Could not create framebuffer.",
 };
 
-const char *kgl_get_error_message(enum CCRAFTE_Error error)
+const char *CCRAFTE_get_error_message(enum CCRAFTE_Error error)
 {
     assert(error >= 0 && error < CCRAFTE_ERROR_LAST && "Error out of bounds.");
     return s_error_messages[error];

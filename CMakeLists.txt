@@ -16,6 +16,7 @@ set(DEPS_PATH ${PROJECT_SOURCE_DIR}/libs)
 add_subdirectory(${DEPS_PATH}/glfw)
 add_subdirectory(${DEPS_PATH}/stb_image)
 add_subdirectory(${DEPS_PATH}/glad)
+add_subdirectory(${DEPS_PATH}/gsl)
 
 # Executable
 add_subdirectory(${PROJECT_SOURCE_DIR}/src)

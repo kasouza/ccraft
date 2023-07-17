@@ -6,20 +6,8 @@
 #include <assert.h>
 #include <stdbool.h>
 
-static struct CCRAFTE_Mouse {
-    double x;
-    double y;
-
-    double scroll_offset_x;
-    double scroll_offset_y;
-    bool scrolling;
-
-    bool buttons[CCRAFTE_MOUSE_BUTTON_LAST];
-} s_mouse = {0};
-
-static struct CCRAFTE_Keyboard {
-    bool keys[CCRAFTE_KEY_LAST];
-} s_keyboard = {0};
+static struct CCRAFTE_Mouse s_mouse = {0};
+static struct CCRAFTE_Keyboard s_keyboard = {0};
 
 // These arrays here map the keys/button/actions this library API provides to
 // the keys/butotn/actions used internally (in this case, provided by GLFW)
@@ -365,3 +353,8 @@ void CCRAFTE_input_update() {
     s_mouse.scroll_offset_y = 0;
     s_mouse.scrolling = false;
 }
+
+bool CCRAFTE_is_key_pressed(enum CCRAFTE_Key key) {
+    return s_keyboard.keys[key];
+}
+

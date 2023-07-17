@@ -1,6 +1,7 @@
 #include "ccraft/engine/renderer.h"
 #include "ccraft/engine/error.h"
 #include "ccraft/engine/input.h"
+#include "ccraft/engine/mesh.h"
 #include "ccraft/engine/shaders.h"
 #include "ccraft/engine/texture.h"
 #include "ccraft/engine/utils.h"
@@ -20,11 +21,14 @@
     if (thing##_error != CCRAFTE_SUCCESS)                                      \
         return thing##_error;
 
+static double s_delta_time = 1.0 / 60.0;
+
 static bool init = false;
 static enum CCRAFTE_InitFlags s_flags = 0;
 
 static GLFWwindow *s_window = NULL;
-static GLuint s_program = 0;
+static GLuint s_sprite_program = 0;
+static GLuint s_3d_program = 0;
 
 static GLuint s_rect_vao = 0;
 static GLuint s_rect_vbo = 0;
@@ -35,8 +39,8 @@ static int s_window_height = 600;
 static void framebuffer_size_callback(GLFWwindow *window, int width,
                                       int height) {
     CCRAFTE_UNUSED(window);
-
     glViewport(0, 0, width, height);
+
     s_window_width = width;
     s_window_height = height;
 }
@@ -49,7 +53,8 @@ static int setup_glfw() {
 
     // Window Creation
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     s_window = glfwCreateWindow(s_window_width, s_window_height, "CCRAFTE",
                                 NULL, NULL);
@@ -107,22 +112,37 @@ static enum CCRAFTE_Error setup_buffers() {
 }
 
 static enum CCRAFTE_Error setup_programs() {
-    GLuint vertex = CCRAFTE_load_shader(CCRAFTE_sprite_vertex_shader, GL_VERTEX_SHADER);
-    GLuint fragment =
+    // Sprite shaders
+    GLuint sprite_vertex =
+        CCRAFTE_load_shader(CCRAFTE_sprite_vertex_shader, GL_VERTEX_SHADER);
+    GLuint sprite_fragment =
         CCRAFTE_load_shader(CCRAFTE_sprite_fragment_shader, GL_FRAGMENT_SHADER);
-    assert(vertex != 0);
-    assert(fragment != 0);
+    assert(sprite_vertex != 0);
+    assert(sprite_fragment != 0);
 
-    s_program = CCRAFTE_create_program(vertex, fragment);
-    if (!s_program) {
+    s_sprite_program = CCRAFTE_create_program(sprite_vertex, sprite_fragment);
+    if (!s_sprite_program) {
+        return CCRAFTE_ERROR_PROGRAM_CREATION;
+    }
+
+    // 3d shaders
+    GLuint vertex_3d =
+        CCRAFTE_load_shader(CCRAFTE_3d_vertex_shader, GL_VERTEX_SHADER);
+    GLuint fragment_3d =
+        CCRAFTE_load_shader(CCRAFTE_3d_fragment_shader, GL_FRAGMENT_SHADER);
+    assert(vertex_3d != 0);
+    assert(fragment_3d != 0);
+
+    s_3d_program = CCRAFTE_create_program(vertex_3d, fragment_3d);
+    if (!s_3d_program) {
         return CCRAFTE_ERROR_PROGRAM_CREATION;
     }
 
     return CCRAFTE_SUCCESS;
 }
 
-int CCRAFTE_init(int window_width, int window_height,
-                 enum CCRAFTE_InitFlags flags) {
+enum CCRAFTE_Error CCRAFTE_init(int window_width, int window_height,
+                                enum CCRAFTE_InitFlags flags) {
     s_window_width = window_width;
     s_window_height = window_height;
 
@@ -155,22 +175,14 @@ void CCRAFTE_present() {
 
     // Render
     static double start = -1;
-    double dt = 1.0 / 60.0;
-    CCRAFTE_UNUSED(dt);
-
     if (start == -1) {
         start = glfwGetTime();
 
     } else {
         double now = glfwGetTime();
-        dt = now - start;
+        s_delta_time = now - start;
         start = now;
     }
-
-    /* glUseProgram(s_program); */
-    /* glBindVertexArray(s_rect_vao); */
-    /*  */
-    /* glDrawArrays(GL_TRIANGLES, 0, 6); */
 
     if (s_flags & CCRAFTE_UNLOCK_FPS) {
         glfwSwapInterval(0);
@@ -186,8 +198,8 @@ void CCRAFTE_terminate() {
     }
 
     // Programs
-    glDeleteProgram(s_program);
-    s_program = 0;
+    glDeleteProgram(s_sprite_program);
+    s_sprite_program = 0;
 
     // VAOs and VBOs
     glDeleteVertexArrays(1, &s_rect_vao);
@@ -223,32 +235,45 @@ void CCRAFTE_draw_sub_texture(struct CCRAFTE_Texture *sprite, double x,
            sub_y2 <= sprite->height &&
            "Sub sprite is out of the texture's bounds.");
 
-    glUseProgram(s_program);
+    glUseProgram(s_sprite_program);
     glBindVertexArray(s_rect_vao);
     glBindTexture(GL_TEXTURE_2D, sprite->texture);
 
-    glUniform1f(glGetUniformLocation(s_program, "window_width"),
+    glUniform1f(glGetUniformLocation(s_sprite_program, "window_width"),
                 s_window_width);
-    glUniform1f(glGetUniformLocation(s_program, "window_height"),
+    glUniform1f(glGetUniformLocation(s_sprite_program, "window_height"),
                 s_window_height);
 
     // All of this can be simplified by using Matrices
-    glUniform1f(glGetUniformLocation(s_program, "translation_x"), x);
-    glUniform1f(glGetUniformLocation(s_program, "translation_y"), y);
+    glUniform1f(glGetUniformLocation(s_sprite_program, "translation_x"), x);
+    glUniform1f(glGetUniformLocation(s_sprite_program, "translation_y"), y);
 
-    glUniform2f(glGetUniformLocation(s_program, "scale"), width, height);
+    glUniform2f(glGetUniformLocation(s_sprite_program, "scale"), width, height);
 
-    glUniform1f(glGetUniformLocation(s_program, "rotation"), rotation);
+    glUniform1f(glGetUniformLocation(s_sprite_program, "rotation"), rotation);
 
-    glUniform2f(glGetUniformLocation(s_program, "pivot"), pivot_x, pivot_y);
+    glUniform2f(glGetUniformLocation(s_sprite_program, "pivot"), pivot_x,
+                pivot_y);
 
-    glUniform2f(glGetUniformLocation(s_program, "sprite_size"), sprite->width,
-                sprite->height);
+    glUniform2f(glGetUniformLocation(s_sprite_program, "sprite_size"),
+                sprite->width, sprite->height);
 
-    glUniform2f(glGetUniformLocation(s_program, "uv_1"), sub_x1, sub_y1);
-    glUniform2f(glGetUniformLocation(s_program, "uv_2"), sub_x2, sub_y2);
+    glUniform2f(glGetUniformLocation(s_sprite_program, "uv_1"), sub_x1, sub_y1);
+    glUniform2f(glGetUniformLocation(s_sprite_program, "uv_2"), sub_x2, sub_y2);
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
+
+void CCRAFTE_draw_mesh(struct CCRAFTE_Mesh *mesh) {
+    glUseProgram(s_3d_program);
+
+    glBindVertexArray(mesh->VAO);
+    glBindVertexArray(mesh->VBO);
+    glDrawArrays(GL_TRIANGLES, 0, mesh->vertices_length);
+
+    glBindVertexArray(0);
+}
+
+double CCRAFTE_get_delta_time() { return s_delta_time; }
 
 GLFWwindow *CCRAFTE_get_window() { return s_window; }

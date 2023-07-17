@@ -149,11 +149,28 @@ enum CCRAFTE_InputAction
     CCRAFTE_RELEASE,
 };
 
+struct CCRAFTE_Mouse {
+    double x;
+    double y;
+
+    double scroll_offset_x;
+    double scroll_offset_y;
+    bool scrolling;
+
+    bool buttons[CCRAFTE_MOUSE_BUTTON_LAST];
+};
+
+struct CCRAFTE_Keyboard {
+    bool keys[CCRAFTE_KEY_LAST];
+};
+
 const struct CCRAFTE_Mouse *CCRAFTE_get_mouse();
 const struct CCRAFTE_Keyboard *CCRAFTE_get_keyboard();
 
 // Used internally, no need to call it yourself
 void CCRAFTE_input_init();
 void CCRAFTE_input_update();
+
+bool CCRAFTE_is_key_pressed(enum CCRAFTE_Key key);
 
 #endif
