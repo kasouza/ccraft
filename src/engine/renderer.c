@@ -117,26 +117,34 @@ static enum CCRAFTE_Error setup_programs() {
         CCRAFTE_load_shader(CCRAFTE_sprite_vertex_shader, GL_VERTEX_SHADER);
     GLuint sprite_fragment =
         CCRAFTE_load_shader(CCRAFTE_sprite_fragment_shader, GL_FRAGMENT_SHADER);
-    assert(sprite_vertex != 0);
-    assert(sprite_fragment != 0);
+    if (!sprite_vertex || !sprite_fragment) {
+        return CCRAFTE_ERROR_SHADER_COMPILATION;
+    }
 
     s_sprite_program = CCRAFTE_create_program(sprite_vertex, sprite_fragment);
     if (!s_sprite_program) {
         return CCRAFTE_ERROR_PROGRAM_CREATION;
     }
 
+    glDeleteShader(sprite_vertex);
+    glDeleteShader(sprite_fragment);
+
     // 3d shaders
     GLuint vertex_3d =
         CCRAFTE_load_shader(CCRAFTE_3d_vertex_shader, GL_VERTEX_SHADER);
     GLuint fragment_3d =
         CCRAFTE_load_shader(CCRAFTE_3d_fragment_shader, GL_FRAGMENT_SHADER);
-    assert(vertex_3d != 0);
-    assert(fragment_3d != 0);
+    if (!vertex_3d || !fragment_3d) {
+        return CCRAFTE_ERROR_SHADER_COMPILATION;
+    }
 
     s_3d_program = CCRAFTE_create_program(vertex_3d, fragment_3d);
     if (!s_3d_program) {
         return CCRAFTE_ERROR_PROGRAM_CREATION;
     }
+
+    glDeleteShader(vertex_3d);
+    glDeleteShader(fragment_3d);
 
     return CCRAFTE_SUCCESS;
 }

@@ -71,8 +71,8 @@ const char *CCRAFTE_3d_vertex_shader =
     "layout (location = 0) in vec3 a_pos;"
 
     "void main() {"
-        "gl_Position = vec4(a_pos.x, a_pos.y, a_pos.z, 1.0);"
-    "}\0";
+        "gl_Position = vec4(a_pos, 1.0);"
+    "}";
 
 const char *CCRAFTE_3d_fragment_shader =
     "#version 330 core\n"
@@ -81,7 +81,7 @@ const char *CCRAFTE_3d_fragment_shader =
     
     "void main() {"
         "frag_color = vec4(1.0f, 0.0f, 0.0f, 1.0f);"
-    "}\0";
+    "}";
 // clang-format on
 
 GLuint CCRAFTE_load_shader_from_file(const char *path, GLenum shader_type) {
