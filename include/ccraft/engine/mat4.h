@@ -34,6 +34,10 @@ union CCRAFTE_Mat4 CCRAFTE_mat4_identity();
 union CCRAFTE_Mat4 CCRAFTE_mat4_multiply_mat4(union CCRAFTE_Mat4 *a,
                                               union CCRAFTE_Mat4 *b);
 
+union CCRAFTE_Mat4 CCRAFTE_mat4_rotation(float x, float y, float z);
+union CCRAFTE_Mat4 CCRAFTE_mat4_perspective(float fov, float aspect_ratio, float near, float far);
+
 void CCRAFTE_mat4_print(union CCRAFTE_Mat4 *mat);
+
 
 #endif

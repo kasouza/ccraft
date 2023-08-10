@@ -75,6 +75,9 @@ static int setup_gl() {
         return CCRAFTE_ERROR_GL_LOAD;
     }
 
+    glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
+
     glViewport(0, 0, s_window_width, s_window_height);
 
     return CCRAFTE_SUCCESS;
@@ -277,6 +280,12 @@ void CCRAFTE_draw_mesh(struct CCRAFTE_Mesh *mesh) {
 
     glBindVertexArray(mesh->VAO);
     glBindVertexArray(mesh->VBO);
+
+    union CCRAFTE_Mat4 projection_matrix = CCRAFTE_mat4_perspective(1.5708f, (float)s_window_width / s_window_height, 0.1f, 100.0f);
+
+    glUniformMatrix4fv(glGetUniformLocation(s_3d_program, "projection_matrix"), 1, GL_FALSE, projection_matrix.data);
+    glUniformMatrix4fv(glGetUniformLocation(s_3d_program, "model_matrix"), 1, GL_FALSE, mesh->matrix.data);
+
     glDrawArrays(GL_TRIANGLES, 0, mesh->vertices_length);
 
     glBindVertexArray(0);

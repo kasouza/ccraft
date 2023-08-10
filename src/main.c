@@ -16,30 +16,51 @@ int main() {
     }
 
     struct CCRAFTE_Vertex vertices[] = {
-        {{{-0.5, -0.5, 0}}},
-        {{{0.5, -0.5, 0}}},
-        {{{0.0, 0.5, 0}}},
+        -0.5f, -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, 0.5f,  0.5f,  -0.5f,
+        0.5f,  0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, -0.5f, -0.5f,
+
+        -0.5f, -0.5f, 0.5f,  0.5f,  -0.5f, 0.5f,  0.5f,  0.5f,  0.5f,
+        0.5f,  0.5f,  0.5f,  -0.5f, 0.5f,  0.5f,  -0.5f, -0.5f, 0.5f,
+
+        -0.5f, 0.5f,  0.5f,  -0.5f, 0.5f,  -0.5f, -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, 0.5f,  -0.5f, 0.5f,  0.5f,
+
+        0.5f,  0.5f,  0.5f,  0.5f,  0.5f,  -0.5f, 0.5f,  -0.5f, -0.5f,
+        0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, 0.5f,  0.5f,  0.5f,  0.5f,
+
+        -0.5f, -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, 0.5f,
+        0.5f,  -0.5f, 0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, -0.5f,
+
+        -0.5f, 0.5f,  -0.5f, 0.5f,  0.5f,  -0.5f, 0.5f,  0.5f,  0.5f,
+        0.5f,  0.5f,  0.5f,  -0.5f, 0.5f,  0.5f,  -0.5f, 0.5f,  -0.5f,
     };
 
     struct CCRAFTE_Texture *mogus = CCRAFTE_load_texture("assets/amogus.png");
-    struct CCRAFTE_Mesh *mesh = CCRAFTE_create_mesh_from_vertices(vertices, 6);
+    struct CCRAFTE_Mesh *mesh = CCRAFTE_create_mesh_from_vertices(vertices, 36);
     if (!mesh) {
         fprintf(stderr, "ERO\n");
         return 1;
     }
 
+    mesh->matrix.a34 = 10;
+
     bool is_running = true;
 
-    union CCRAFTE_Mat4 a = CCRAFTE_mat4_identity();
-    union CCRAFTE_Mat4 b = CCRAFTE_mat4_identity();
-
-    union CCRAFTE_Mat4 c = CCRAFTE_mat4_multiply_mat4(&a, &b);
+    float theta = 0.1;
 
     while (is_running) {
         // Events
         if (CCRAFTE_is_key_pressed(CCRAFTE_KEY_ESCAPE)) {
             is_running = false;
         }
+
+        theta += 0.01;
+
+        // Update
+        union CCRAFTE_Mat4 rotation_matrix = CCRAFTE_mat4_rotation(theta, theta, theta);
+        rotation_matrix.a34 = 4;
+
+        mesh->matrix = rotation_matrix;
 
         // Render
         CCRAFTE_clear();

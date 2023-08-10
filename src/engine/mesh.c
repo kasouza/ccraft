@@ -12,6 +12,8 @@ struct CCRAFTE_Mesh *CCRAFTE_create_mesh_uninitialized_vertices() {
         return NULL;
     }
 
+    mesh->matrix = CCRAFTE_mat4_identity();
+
     mesh->vertices = NULL;
     mesh->indices = NULL;
 
@@ -43,7 +45,9 @@ struct CCRAFTE_Mesh *CCRAFTE_create_mesh_uninitialized_vertices() {
 
     glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(struct CCRAFTE_Vertex), (void*)offsetof(struct CCRAFTE_Vertex, position));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
+                          sizeof(struct CCRAFTE_Vertex),
+                          (void *)offsetof(struct CCRAFTE_Vertex, position));
 
     glBindVertexArray(0);
 
@@ -107,9 +111,11 @@ void CCRAFTE_free_mesh(struct CCRAFTE_Mesh *mesh) {
     free(mesh);
 }
 
-void CCRAFTE_mesh_update_buffers(struct CCRAFTE_Mesh* mesh) {
+void CCRAFTE_mesh_update_buffers(struct CCRAFTE_Mesh *mesh) {
     glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
-    glBufferData(GL_ARRAY_BUFFER, mesh->vertices_length * sizeof(struct CCRAFTE_Vertex), mesh->vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER,
+                 mesh->vertices_length * sizeof(struct CCRAFTE_Vertex),
+                 mesh->vertices, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -127,7 +133,8 @@ CCRAFTE_create_mesh_from_vertices(struct CCRAFTE_Vertex *vertices,
 
     mesh->vertices_length = vertex_count;
     mesh->vertices_capacity = vertex_count;
-    memcpy(mesh->vertices, vertices, vertex_count * sizeof(struct CCRAFTE_Vertex));
+    memcpy(mesh->vertices, vertices,
+           vertex_count * sizeof(struct CCRAFTE_Vertex));
 
     CCRAFTE_mesh_update_buffers(mesh);
 

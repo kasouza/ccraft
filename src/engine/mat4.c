@@ -1,5 +1,6 @@
 #include "ccraft/engine/mat4.h"
 #include <assert.h>
+#include <math.h>
 #include <stdio.h>
 
 union CCRAFTE_Mat4 CCRAFTE_mat4_identity() {
@@ -49,4 +50,45 @@ void CCRAFTE_mat4_print(union CCRAFTE_Mat4 *mat) {
     }
 
     printf("]\n");
+}
+
+union CCRAFTE_Mat4 CCRAFTE_mat4_rotation(float x, float y, float z) {
+    float sin_alpha = sinf(x);
+    float cos_alpha = cosf(x);
+
+    float sin_betha = sinf(y);
+    float cos_betha = cosf(y);
+
+    float sin_gamma = sinf(z);
+    float cos_gamma = cosf(z);
+
+    union CCRAFTE_Mat4 mat = {
+        {cos_betha * cos_gamma, cos_betha * sin_gamma, -sin_betha, 0,
+
+         sin_alpha * sin_betha * cos_gamma - cos_alpha * sin_gamma,
+         sin_alpha * sin_betha * sin_gamma + cos_alpha * cos_gamma,
+         sin_alpha * cos_betha, 0,
+
+         cos_alpha * sin_betha * cos_gamma + sin_alpha * sin_gamma,
+         cos_alpha * sin_betha * sin_gamma - sin_alpha * cos_gamma,
+         cos_alpha * cos_betha, 0,
+
+         0, 0, 0, 1}};
+
+    return mat;
+}
+
+union CCRAFTE_Mat4 CCRAFTE_mat4_perspective(float fov, float aspect_ratio, float near, float far) {
+    float tan_half_alpha = tanf(fov / 2.0f);
+    float n = 1 / tan_half_alpha;
+
+    union CCRAFTE_Mat4 mat = {{n / aspect_ratio, 0, 0, 0,
+
+                               0, n, 0, 0,
+
+                               0, 0, (-near - far) / (near - far), 1,
+
+                               0, 0, (2 * far * near) / (near - far), 0}};
+
+    return mat;
 }
