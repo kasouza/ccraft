@@ -1,5 +1,8 @@
 #include "ccraft/engine/error.h"
+#include "ccraft/engine/gl_includes.h"
+
 #include <assert.h>
+#include <stdio.h>
 
 const char *s_error_messages[CCRAFTE_ERROR_LAST] = {
     [CCRAFTE_SUCCESS] = "",
@@ -15,4 +18,14 @@ const char *CCRAFTE_get_error_message(enum CCRAFTE_Error error)
 {
     assert(error >= 0 && error < CCRAFTE_ERROR_LAST && "Error out of bounds.");
     return s_error_messages[error];
+}
+
+int CCRAFTE_handle_gl_errors() {
+    int error = glGetError();
+    while (error) {
+        printf("Error: %d\n", error);
+        error = glGetError();
+    }
+
+    return error;
 }

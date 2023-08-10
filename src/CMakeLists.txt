@@ -9,11 +9,12 @@ set(SOURCES
 	engine/shaders.c
 	engine/texture.c
 	engine/utils.c
+    engine/mat4.c
     main.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} glfw glad stb_image gsl)
+target_link_libraries(${PROJECT_NAME} glfw glad stb_image)
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/include)
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 target_compile_features(${PROJECT_NAME} PRIVATE c_std_17)

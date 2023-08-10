@@ -16,5 +16,6 @@ enum CCRAFTE_Error
 };
 
 const char *CCRAFTE_get_error_message(enum CCRAFTE_Error error);
+int CCRAFTE_handle_gl_errors();
 
 #endif
