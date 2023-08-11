@@ -12,7 +12,9 @@ struct CCRAFTE_Mesh *CCRAFTE_create_mesh_uninitialized_vertices() {
         return NULL;
     }
 
-    mesh->matrix = CCRAFTE_mat4_identity();
+    mesh->transform.scale.x = 1;
+    mesh->transform.scale.y = 1;
+    mesh->transform.scale.z = 1;
 
     mesh->vertices = NULL;
     mesh->indices = NULL;

@@ -5,6 +5,7 @@
 #include "ccraft/engine/renderer.h"
 #include "ccraft/engine/texture.h"
 
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -42,11 +43,13 @@ int main() {
         return 1;
     }
 
-    mesh->matrix.a34 = 10;
-
     bool is_running = true;
 
-    float theta = 0.1;
+    mesh->transform.translation.z = 10;
+    union CCRAFTE_Vec3 dir = {{1, 1, 0}};
+    dir = CCRAFTE_vec3_normalize(dir);
+
+    float t = 0;
 
     while (is_running) {
         // Events
@@ -54,13 +57,12 @@ int main() {
             is_running = false;
         }
 
-        theta += 0.01;
+        t+= 0.01;
 
-        // Update
-        union CCRAFTE_Mat4 rotation_matrix = CCRAFTE_mat4_rotation(theta, theta, theta);
-        rotation_matrix.a34 = 4;
+        // mesh->transform.translation.z = (sinf(t) + 1) * 5;
 
-        mesh->matrix = rotation_matrix;
+        dir = CCRAFTE_vec3_normalize(dir);
+        // mesh->transform.rotation = CCRAFTE_quaternion_rotation(t * 2, dir);
 
         // Render
         CCRAFTE_clear();

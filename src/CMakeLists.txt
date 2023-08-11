@@ -2,6 +2,7 @@
 file(COPY ${PROJECT_SOURCE_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 set(SOURCES
+    engine/camera.c
     engine/mesh.c
 	engine/error.c
 	engine/input.c
@@ -10,6 +11,8 @@ set(SOURCES
 	engine/texture.c
 	engine/utils.c
     engine/mat4.c
+    engine/vec3.c
+    engine/quaternion.c
     main.c
 )
 

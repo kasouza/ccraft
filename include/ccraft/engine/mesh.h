@@ -3,6 +3,7 @@
 
 #include "ccraft/engine/gl_includes.h"
 #include "ccraft/engine/mat4.h"
+#include "ccraft/engine/transform.h"
 #include "ccraft/engine/vertex.h"
 
 #define CCRAFTE_INITIAL_VERTEX_CAPACITY 4
@@ -17,7 +18,7 @@ struct CCRAFTE_Mesh {
     GLuint VBO;
     GLuint EBO;
 
-    union CCRAFTE_Mat4 matrix;
+    struct CCRAFTE_Transform transform;
 };
 
 struct CCRAFTE_Mesh *CCRAFTE_create_mesh();
