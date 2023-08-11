@@ -295,8 +295,8 @@ const struct CCRAFTE_Keyboard *CCRAFTE_get_keyboard() { return &s_keyboard; }
 void input_cursor_pos_cb(GLFWwindow *window, double x_pos, double y_pos) {
     CCRAFTE_UNUSED(window);
 
-    s_mouse.x = x_pos;
-    s_mouse.y = y_pos;
+    s_mouse.position.x = x_pos;
+    s_mouse.position.y = y_pos;
 }
 
 void input_key_cb(GLFWwindow *window, int key, int scancode, int action,
@@ -358,3 +358,6 @@ bool CCRAFTE_is_key_pressed(enum CCRAFTE_Key key) {
     return s_keyboard.keys[key];
 }
 
+union CCRAFTE_Vec2 CCRAFTE_get_mouse_position() {
+    return s_mouse.position;
+}

@@ -1,6 +1,8 @@
 #ifndef KASOUZA_INCLUDE_CCRAFT_ENGINE_INPUT_H
 #define KASOUZA_INCLUDE_CCRAFT_ENGINE_INPUT_H
 
+#include "ccraft/engine/vec2.h"
+
 #include <stdbool.h>
 
 enum CCRAFTE_Key
@@ -150,8 +152,7 @@ enum CCRAFTE_InputAction
 };
 
 struct CCRAFTE_Mouse {
-    double x;
-    double y;
+    union CCRAFTE_Vec2 position;
 
     double scroll_offset_x;
     double scroll_offset_y;
@@ -172,5 +173,6 @@ void CCRAFTE_input_init();
 void CCRAFTE_input_update();
 
 bool CCRAFTE_is_key_pressed(enum CCRAFTE_Key key);
+union CCRAFTE_Vec2 CCRAFTE_get_mouse_position();
 
 #endif

@@ -1,6 +1,7 @@
 #include "ccraft/engine/renderer.h"
 #include "ccraft/engine/error.h"
 #include "ccraft/engine/input.h"
+#include "ccraft/engine/math.h"
 #include "ccraft/engine/mesh.h"
 #include "ccraft/engine/shaders.h"
 #include "ccraft/engine/texture.h"
@@ -36,7 +37,7 @@ static GLuint s_rect_vbo = 0;
 static int s_window_width = 1024;
 static int s_window_height = 600;
 
-static struct CCRAFTE_Camera s_camera;
+static float s_fov = CCRAFTE_RADIANS(90.0f);
 
 static void framebuffer_size_callback(GLFWwindow *window, int width,
                                       int height) {
@@ -45,34 +46,6 @@ static void framebuffer_size_callback(GLFWwindow *window, int width,
 
     s_window_width = width;
     s_window_height = height;
-}
-
-static void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos){
-    CCRAFTE_UNUSED(window);
-
-    static bool first = true;
-    static double previous_x = 0;
-    static double previous_y = 0;
-
-    if (first) {
-        previous_x = xpos;
-        previous_y = ypos;
-        first = false;
-    }
-
-    double dx = (xpos - previous_x) * (M_PI / 180) * 0.1;
-    double dy = (ypos - previous_y) * (M_PI / 180) * 0.1;
-
-    union CCRAFTE_Vec3 right = CCRAFTE_vec3_cross(s_camera.target, s_camera.up);
-
-    s_camera.target = CCRAFTE_vec3_rotate(s_camera.target, dy, right);
-    s_camera.up = CCRAFTE_vec3_rotate(s_camera.up, dy, right);
-
-    s_camera.target = CCRAFTE_vec3_rotate(s_camera.target, dx, s_camera.up);
-
-
-    previous_x = xpos;
-    previous_y = ypos;
 }
 
 static int setup_glfw() {
@@ -93,10 +66,10 @@ static int setup_glfw() {
         return CCRAFTE_ERROR_WINDOW_CREATION;
     }
 
-    glfwSetInputMode(s_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwMakeContextCurrent(s_window);
+
+    glfwSetInputMode(s_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetFramebufferSizeCallback(s_window, framebuffer_size_callback);
-    // glfwSetCursorPosCallback(s_window, cursor_pos_callback);
 
     return CCRAFTE_SUCCESS;
 }
@@ -186,9 +159,6 @@ static enum CCRAFTE_Error setup_programs() {
 
 enum CCRAFTE_Error CCRAFTE_init(int window_width, int window_height,
                                 enum CCRAFTE_InitFlags flags) {
-    s_camera = CCRAFTE_create_camera();
-    s_camera.position.z = -10;
-
     s_window_width = window_width;
     s_window_height = window_height;
 
@@ -310,10 +280,10 @@ void CCRAFTE_draw_sub_texture(struct CCRAFTE_Texture *sprite, double x,
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void CCRAFTE_draw_mesh(struct CCRAFTE_Mesh *mesh) {
+void CCRAFTE_draw_mesh(struct CCRAFTE_Camera *camera,
+                       struct CCRAFTE_Mesh *mesh) {
     double x, y;
     glfwGetCursorPos(s_window, &x, &y);
-    cursor_pos_callback(s_window, x, y);
 
     glUseProgram(s_3d_program);
 
@@ -321,13 +291,12 @@ void CCRAFTE_draw_mesh(struct CCRAFTE_Mesh *mesh) {
     glBindVertexArray(mesh->VBO);
 
     union CCRAFTE_Mat4 projection_matrix = CCRAFTE_mat4_perspective(
-        1.5708f, (float)s_window_width / s_window_height, 0.1f, 100.0f);
+        s_fov, (float)s_window_width / s_window_height, 0.1f, 100.0f);
 
     union CCRAFTE_Mat4 model_matrix =
         CCRAFTE_mat4_model_from_transform(&mesh->transform);
 
-    s_camera.target.z = 1;
-    union CCRAFTE_Mat4 view_matrix = CCRAFTE_mat4_view_from_camera(&s_camera);
+    union CCRAFTE_Mat4 view_matrix = CCRAFTE_mat4_view_from_camera(camera);
 
     glUniformMatrix4fv(glGetUniformLocation(s_3d_program, "projection_matrix"),
                        1, GL_FALSE, projection_matrix.data);
@@ -341,6 +310,6 @@ void CCRAFTE_draw_mesh(struct CCRAFTE_Mesh *mesh) {
     glBindVertexArray(0);
 }
 
-double CCRAFTE_get_delta_time() { return s_delta_time; }
+double CCRAFTE_get_deltatime() { return s_delta_time; }
 
 GLFWwindow *CCRAFTE_get_window() { return s_window; }

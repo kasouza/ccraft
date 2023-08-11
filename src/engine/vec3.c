@@ -31,6 +31,28 @@ void CCRAFTE_vec3_print(union CCRAFTE_Vec3 vec) {
     printf("[ %f, %f, %f ]\n", vec.x, vec.y, vec.z);
 }
 
+union CCRAFTE_Vec3 CCRAFTE_vec3_add(union CCRAFTE_Vec3 a,
+                                    union CCRAFTE_Vec3 b) {
+    union CCRAFTE_Vec3 c = {{
+        a.x + b.x,
+        a.y + b.y,
+        a.z + b.z,
+    }};
+
+    return c;
+}
+
+union CCRAFTE_Vec3 CCRAFTE_vec3_subtract(union CCRAFTE_Vec3 a,
+                                    union CCRAFTE_Vec3 b) {
+    union CCRAFTE_Vec3 c = {{
+        a.x - b.x,
+        a.y - b.y,
+        a.z - b.z,
+    }};
+
+    return c;
+}
+
 union CCRAFTE_Vec3 CCRAFTE_vec3_normalize(union CCRAFTE_Vec3 vec) {
     float magnitude = sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 
@@ -47,4 +69,28 @@ union CCRAFTE_Vec3 CCRAFTE_vec3_cross(union CCRAFTE_Vec3 a,
         {a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x}};
 
     return c;
+}
+
+union CCRAFTE_Vec3 CCRAFTE_vec3_scale(union CCRAFTE_Vec3 vec, float scalar) {
+
+    union CCRAFTE_Vec3 scaled = {{
+        vec.x * scalar,
+        vec.y * scalar,
+        vec.z * scalar,
+    }};
+
+    return scaled;
+}
+
+union CCRAFTE_Vec3 CCRAFTE_vec3_direction(float yaw, float pitch) {
+    float cos_yaw = cosf(yaw);
+    float sin_yaw = sinf(yaw);
+
+    float cos_pitch = cosf(pitch);
+    float sin_pitch = sinf(pitch);
+
+    union CCRAFTE_Vec3 dir = {
+        {cos_yaw * cos_pitch, sin_pitch, sin_yaw * cos_pitch}};
+
+    return CCRAFTE_vec3_normalize(dir);
 }

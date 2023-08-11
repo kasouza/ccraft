@@ -42,6 +42,24 @@ CCRAFTE_quaternion_rotation(float a, union CCRAFTE_Vec3 direction) {
 }
 
 union CCRAFTE_Quaternion
+CCRAFTE_quaternion_rotation_from_euler(float roll, float pitch, float yaw) {
+    float cr = cosf(roll * 0.5);
+    float sr = sinf(roll * 0.5);
+    float cp = cosf(pitch * 0.5);
+    float sp = sinf(pitch * 0.5);
+    float cy = cosf(yaw * 0.5);
+    float sy = sinf(yaw * 0.5);
+
+    union CCRAFTE_Quaternion q;
+    q.w = cr * cp * cy + sr * sp * sy;
+    q.x = sr * cp * cy - cr * sp * sy;
+    q.y = cr * sp * cy + sr * cp * sy;
+    q.z = cr * cp * sy - sr * sp * cy;
+
+    return q;
+}
+
+union CCRAFTE_Quaternion
 CCRAFTE_quaternion_rotate(union CCRAFTE_Quaternion q, float a, union CCRAFTE_Vec3 direction) {
     union CCRAFTE_Quaternion rotation = CCRAFTE_quaternion_rotation(a, direction);
 

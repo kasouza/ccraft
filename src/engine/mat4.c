@@ -147,19 +147,25 @@ CCRAFTE_mat4_rotation_from_quaternion(union CCRAFTE_Quaternion q) {
 }
 
 union CCRAFTE_Mat4
-CCRAFTE_mat4_view_from_camera(struct CCRAFTE_Camera* camera) {
-    union CCRAFTE_Vec3 N = camera->target;
-    union CCRAFTE_Vec3 V = camera->up;
-    union CCRAFTE_Vec3 U = CCRAFTE_vec3_cross(N, V);
+CCRAFTE_mat4_view_from_camera(struct CCRAFTE_Camera *camera) {
+    union CCRAFTE_Vec3 target = CCRAFTE_vec3_direction(camera->yaw, camera->pitch);
+
+    union CCRAFTE_Vec3 D = CCRAFTE_vec3_normalize(target);
+    union CCRAFTE_Vec3 R = CCRAFTE_vec3_normalize(CCRAFTE_vec3_cross(target, camera->world_up));
+    union CCRAFTE_Vec3 U = CCRAFTE_vec3_normalize(CCRAFTE_vec3_cross(D, R));
+
+    union CCRAFTE_Mat4 translation = {{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+                                       -camera->position.x, -camera->position.y,
+                                       -camera->position.z, 1}};
 
     union CCRAFTE_Mat4 mat = {
         {
-        U.x, V.x, N.x, 0,
-        U.y, V.y, N.y, 0,
-        U.z, V.z, N.z, 0,
-        -camera->position.x, -camera->position.y, -camera->position.z, 1
+            R.x, U.x, D.x, 0,
+            R.y, U.y, D.y, 0,
+            R.z, U.z, D.z, 0,
+            0, 0, 0, 1
         },
     };
 
-    return mat;
+    return CCRAFTE_mat4_multiply_mat4(&mat, &translation);
 }

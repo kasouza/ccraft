@@ -25,9 +25,12 @@ union CCRAFTE_Quaternion
 CCRAFTE_quaternion_rotation(float a, union CCRAFTE_Vec3 direction);
 
 union CCRAFTE_Quaternion
-CCRAFTE_quaternion_rotate(union CCRAFTE_Quaternion q, float a, union CCRAFTE_Vec3 direction);
+CCRAFTE_quaternion_rotation_from_euler(float roll, float pitch, float yaw);
+
+union CCRAFTE_Quaternion
+CCRAFTE_quaternion_rotate(union CCRAFTE_Quaternion q, float a,
+                          union CCRAFTE_Vec3 direction);
 
 void CCRAFTE_quaternion_print(union CCRAFTE_Quaternion q);
-
 
 #endif
