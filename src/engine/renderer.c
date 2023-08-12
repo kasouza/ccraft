@@ -80,8 +80,8 @@ static int setup_gl() {
         return CCRAFTE_ERROR_GL_LOAD;
     }
 
-    // glCullFace(GL_BACK);
-    // glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
 
     glViewport(0, 0, s_window_width, s_window_height);
 
@@ -282,9 +282,6 @@ void CCRAFTE_draw_sub_texture(struct CCRAFTE_Texture *sprite, double x,
 
 void CCRAFTE_draw_mesh(struct CCRAFTE_Camera *camera,
                        struct CCRAFTE_Mesh *mesh) {
-    double x, y;
-    glfwGetCursorPos(s_window, &x, &y);
-
     glUseProgram(s_3d_program);
 
     glBindVertexArray(mesh->VAO);

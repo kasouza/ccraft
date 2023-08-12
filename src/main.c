@@ -4,6 +4,8 @@
 #include "ccraft/engine/mesh.h"
 #include "ccraft/engine/renderer.h"
 #include "ccraft/engine/texture.h"
+#include "ccraft/chunk.h"
+#include "ccraft/meshing.h"
 
 #include <math.h>
 #include <stdbool.h>
@@ -46,31 +48,26 @@ int main() {
         return error;
     }
 
-    struct CCRAFTE_Vertex vertices[] = {
-        -0.5f, -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, 0.5f,  0.5f,  -0.5f,
-        0.5f,  0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, -0.5f, -0.5f,
-
-        -0.5f, -0.5f, 0.5f,  0.5f,  -0.5f, 0.5f,  0.5f,  0.5f,  0.5f,
-        0.5f,  0.5f,  0.5f,  -0.5f, 0.5f,  0.5f,  -0.5f, -0.5f, 0.5f,
-
-        -0.5f, 0.5f,  0.5f,  -0.5f, 0.5f,  -0.5f, -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, 0.5f,  -0.5f, 0.5f,  0.5f,
-
-        0.5f,  0.5f,  0.5f,  0.5f,  0.5f,  -0.5f, 0.5f,  -0.5f, -0.5f,
-        0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, 0.5f,  0.5f,  0.5f,  0.5f,
-
-        -0.5f, -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, 0.5f,
-        0.5f,  -0.5f, 0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, -0.5f,
-
-        -0.5f, 0.5f,  -0.5f, 0.5f,  0.5f,  -0.5f, 0.5f,  0.5f,  0.5f,
-        0.5f,  0.5f,  0.5f,  -0.5f, 0.5f,  0.5f,  -0.5f, 0.5f,  -0.5f,
-    };
-
     struct CCRAFTE_Camera camera = CCRAFTE_create_camera();
     camera.position.z = 10;
 
+    struct CCRAFT_Chunk chunk = { 0 };
+    chunk.voxels[0].type = CCRAFT_VOXEL_TYPE_STONE;
+    chunk.voxels[1].type = CCRAFT_VOXEL_TYPE_STONE;
+    chunk.voxels[2].type = CCRAFT_VOXEL_TYPE_STONE;
+    for (size_t x = 0; x < CCRAFT_CHUNK_SIZE; x++) {
+        for (size_t y = 0; y < CCRAFT_CHUNK_SIZE; y++) {
+            for (size_t z = 0; z < CCRAFT_CHUNK_SIZE; z++) {
+                size_t idx = CCRAFT_CHUNK_INDEX(x, y, z);
+                /*if (idx % 2 == 0) {*/
+                    chunk.voxels[idx].type = CCRAFT_VOXEL_TYPE_STONE;
+                /*}*/
+            }
+        }
+    }
+
     struct CCRAFTE_Texture *mogus = CCRAFTE_load_texture("assets/amogus.png");
-    struct CCRAFTE_Mesh *mesh = CCRAFTE_create_mesh_from_vertices(vertices, 36);
+    struct CCRAFTE_Mesh *mesh = CCRAFT_create_simple_mesh(&chunk);
     if (!mesh) {
         fprintf(stderr, "ERO\n");
         return 1;

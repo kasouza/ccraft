@@ -13,6 +13,7 @@ set(SOURCES
     engine/mat4.c
     engine/vec3.c
     engine/quaternion.c
+    meshing.c
     main.c
 )
 
