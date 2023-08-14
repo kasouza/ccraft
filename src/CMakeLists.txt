@@ -12,13 +12,16 @@ set(SOURCES
 	engine/utils.c
     engine/mat4.c
     engine/vec3.c
+    engine/vec3i.c
     engine/quaternion.c
+    engine/utils.c
     meshing.c
     main.c
+    world.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} glfw glad stb_image)
+target_link_libraries(${PROJECT_NAME} glfw glad stb_image klib)
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/include)
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 target_compile_features(${PROJECT_NAME} PRIVATE c_std_17)

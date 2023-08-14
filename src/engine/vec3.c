@@ -31,6 +31,10 @@ void CCRAFTE_vec3_print(union CCRAFTE_Vec3 vec) {
     printf("[ %f, %f, %f ]\n", vec.x, vec.y, vec.z);
 }
 
+bool CCRAFTE_vec3_equals(union CCRAFTE_Vec3 a, union CCRAFTE_Vec3 b) {
+    return a.x == b.x && a.y == b.y && a.z == b.z;
+}
+
 union CCRAFTE_Vec3 CCRAFTE_vec3_add(union CCRAFTE_Vec3 a,
                                     union CCRAFTE_Vec3 b) {
     union CCRAFTE_Vec3 c = {{

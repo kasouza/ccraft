@@ -1,3 +1,6 @@
 [submodule "libs/glfw"]
 	path = libs/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "libs/klib"]
+	path = libs/klib
+	url = git@github.com:kasouza/klib.git

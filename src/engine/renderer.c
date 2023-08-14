@@ -68,7 +68,7 @@ static int setup_glfw() {
 
     glfwMakeContextCurrent(s_window);
 
-    glfwSetInputMode(s_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    /*glfwSetInputMode(s_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);*/
     glfwSetFramebufferSizeCallback(s_window, framebuffer_size_callback);
 
     return CCRAFTE_SUCCESS;
@@ -285,7 +285,7 @@ void CCRAFTE_draw_mesh(struct CCRAFTE_Camera *camera,
     glUseProgram(s_3d_program);
 
     glBindVertexArray(mesh->VAO);
-    glBindVertexArray(mesh->VBO);
+    /*glBindVertexArray(mesh->VBO);*/
 
     union CCRAFTE_Mat4 projection_matrix = CCRAFTE_mat4_perspective(
         s_fov, (float)s_window_width / s_window_height, 0.1f, 100.0f);

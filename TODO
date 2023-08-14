@@ -1,1 +1,1 @@
-- Mesh building
+Para mover o mundo, iterar pelo index, calculando as coordenadas, removendo os chunks muito distantes do centro e adicionando novos onde não tiver
