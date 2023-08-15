@@ -33,7 +33,7 @@ void CCRAFTE_camera_update_rotation(struct CCRAFTE_Camera *camera) {
     double dy = (mouse_pos.y - previous_y) * (M_PI / 180) * CCRAFTE_get_deltatime();
 
     camera->yaw += dx;
-    camera->pitch += dy;
+    camera->pitch -= dy;
 
     if (camera->pitch >= CCRAFTE_RADIANS(89.0f)) {
         camera->pitch = CCRAFTE_RADIANS(89.0f);
@@ -46,15 +46,12 @@ void CCRAFTE_camera_update_rotation(struct CCRAFTE_Camera *camera) {
 }
 
 void CCRAFTE_camera_move(struct CCRAFTE_Camera* camera, enum CCRAFTE_Direction direction, float speed) {
-
     union CCRAFTE_Vec3 direction_vec = {0};
 
     union CCRAFTE_Vec3 target =
         CCRAFTE_vec3_direction(camera->yaw, camera->pitch);
     union CCRAFTE_Vec3 right =
         CCRAFTE_vec3_normalize(CCRAFTE_vec3_cross(target, camera->world_up));
-    union CCRAFTE_Vec3 up =
-        CCRAFTE_vec3_normalize(CCRAFTE_vec3_cross(target, right));
 
     switch (direction) {
     case CCRAFTE_DIRECTION_FORWARD:
@@ -73,11 +70,11 @@ void CCRAFTE_camera_move(struct CCRAFTE_Camera* camera, enum CCRAFTE_Direction d
         break;
 
     case CCRAFTE_DIRECTION_UPWARD:
-        direction_vec = up;
+        direction_vec = camera->world_up;
         break;
 
     case CCRAFTE_DIRECTION_DOWNWARD:
-        direction_vec = CCRAFTE_vec3_scale(up, -1);
+        direction_vec = CCRAFTE_vec3_scale(camera->world_up, -1);
         break;
     }
 

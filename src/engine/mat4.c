@@ -152,7 +152,7 @@ CCRAFTE_mat4_view_from_camera(struct CCRAFTE_Camera *camera) {
 
     union CCRAFTE_Vec3 D = CCRAFTE_vec3_normalize(target);
     union CCRAFTE_Vec3 R = CCRAFTE_vec3_normalize(CCRAFTE_vec3_cross(target, camera->world_up));
-    union CCRAFTE_Vec3 U = CCRAFTE_vec3_normalize(CCRAFTE_vec3_cross(D, R));
+    union CCRAFTE_Vec3 U = CCRAFTE_vec3_normalize(CCRAFTE_vec3_cross(R, D));
 
     union CCRAFTE_Mat4 translation = {{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
                                        -camera->position.x, -camera->position.y,

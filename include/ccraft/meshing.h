@@ -4,6 +4,6 @@
 #include "ccraft/chunk.h"
 #include "ccraft/engine/mesh.h"
 
-struct CCRAFTE_Mesh* CCRAFT_create_simple_mesh(struct CCRAFT_Chunk* chunk);
+void CCRAFT_remesh(struct CCRAFT_Chunk *chunk);
 
 #endif

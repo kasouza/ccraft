@@ -4,8 +4,9 @@
 #include "ccraft/engine/camera.h"
 #include "ccraft/engine/gl_includes.h"
 #include "ccraft/engine/error.h"
+#include "ccraft/engine/texture.h"
+#include "ccraft/engine/texture_array.h"
 
-struct CCRAFTE_Texture;
 struct CCRAFTE_Mesh;
 
 enum CCRAFTE_InitFlags
@@ -19,7 +20,10 @@ void CCRAFTE_clear();
 void CCRAFTE_clear_colored(float r, float g, float b, float a);
 void CCRAFTE_terminate();
 
-void CCRAFTE_draw_mesh(struct CCRAFTE_Camera* camera, struct CCRAFTE_Mesh *mesh);
+void CCRAFTE_draw_mesh(struct CCRAFTE_Camera *camera,
+                       struct CCRAFTE_Mesh *mesh,
+                       struct CCRAFTE_TextureArray* texture);
+
 void CCRAFTE_draw_texture(struct CCRAFTE_Texture *sprite, double x, double y, double width,
                      double height, double rotation, double pivot_x,
                      double pivot_y);

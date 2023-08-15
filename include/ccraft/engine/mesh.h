@@ -25,7 +25,10 @@ struct CCRAFTE_Mesh *CCRAFTE_create_mesh();
 struct CCRAFTE_Mesh *
 CCRAFTE_create_mesh_from_vertices(struct CCRAFTE_Vertex *vertices,
                                   size_t vertex_count);
-
 void CCRAFTE_free_mesh(struct CCRAFTE_Mesh *mesh);
+
+void CCRAFTE_mesh_update_buffers(struct CCRAFTE_Mesh *mesh);
+void CCRAFTE_mesh_update(struct CCRAFTE_Mesh *mesh,
+                         struct CCRAFTE_Vertex *vertices, size_t vertex_count);
 
 #endif

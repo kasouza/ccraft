@@ -54,7 +54,6 @@ const char *CCRAFTE_sprite_fragment_shader =
     "in vec2 tex_coords;"
     
     "uniform sampler2D tex;"
-    
     "out vec4 frag_color;"
     
     "void main() {"
@@ -69,22 +68,36 @@ const char *CCRAFTE_3d_vertex_shader =
     "#version 330 core\n"
 
     "layout (location = 0) in vec3 a_pos;"
+    "layout (location = 1) in vec2 a_tex_coords;"
+    "layout (location = 2) in float a_texture_array_index;"
 
     "uniform mat4 model_matrix;"
     "uniform mat4 view_matrix;"
     "uniform mat4 projection_matrix;"
 
+    "out vec2 tex_coords;"
+    "out float texture_array_index;"
+
     "void main() {"
         "gl_Position = projection_matrix * view_matrix * model_matrix * vec4(a_pos, 1.0);"
+        "tex_coords = a_tex_coords;"
+        "texture_array_index = a_texture_array_index;"
     "}";
 
 const char *CCRAFTE_3d_fragment_shader =
     "#version 330 core\n"
 
+    "uniform sampler2DArray tex;"
+
+    "in vec2 tex_coords;"
+    "in float texture_array_index;"
     "out vec4 frag_color;"
     
     "void main() {"
-        "frag_color = vec4(1.0f, 0.0f, 0.0f, 1.0f);"
+        "frag_color = texture(tex, vec3(tex_coords, texture_array_index));"
+        "if (frag_color.a == 0) {"
+            "discard;"
+        "}"
     "}";
 // clang-format on
 

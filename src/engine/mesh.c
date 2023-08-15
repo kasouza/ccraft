@@ -2,6 +2,7 @@
 #include "ccraft/engine/utils.h"
 #include "ccraft/engine/vertex.h"
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -46,10 +47,21 @@ struct CCRAFTE_Mesh *CCRAFTE_create_mesh_uninitialized_vertices() {
     glBindVertexArray(mesh->VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
+
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
                           sizeof(struct CCRAFTE_Vertex),
                           (void *)offsetof(struct CCRAFTE_Vertex, position));
+
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE,
+                          sizeof(struct CCRAFTE_Vertex),
+                          (void *)offsetof(struct CCRAFTE_Vertex, tex_coords));
+
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE,
+                          sizeof(struct CCRAFTE_Vertex),
+                          (void *)offsetof(struct CCRAFTE_Vertex, texture_array_index));
 
     glBindVertexArray(0);
 
@@ -141,4 +153,31 @@ CCRAFTE_create_mesh_from_vertices(struct CCRAFTE_Vertex *vertices,
     CCRAFTE_mesh_update_buffers(mesh);
 
     return mesh;
+}
+
+int i = 0;
+
+void CCRAFTE_mesh_update(struct CCRAFTE_Mesh *mesh, struct CCRAFTE_Vertex* vertices, size_t vertex_count) {
+    assert(mesh != NULL);
+    assert(vertices != NULL);
+
+    if (mesh->vertices != NULL) {
+        free(mesh->vertices);
+        mesh->vertices = NULL;
+    }
+
+    mesh->vertices_length = vertex_count;
+    mesh->vertices_capacity = vertex_count;
+
+    if (vertex_count > 0) {
+        mesh->vertices = malloc(sizeof(struct CCRAFTE_Vertex) * vertex_count);
+        if (mesh->vertices == NULL) {
+            fprintf(stderr, "[%s:%d]could not allocate memory for mesh vertices\n", __FILE__, __LINE__);
+            return;
+        }
+
+        memcpy(mesh->vertices, vertices, vertex_count * sizeof(struct CCRAFTE_Vertex));
+    }
+
+    CCRAFTE_mesh_update_buffers(mesh);
 }

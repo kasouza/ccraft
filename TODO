@@ -1,1 +1,3 @@
-Para mover o mundo, iterar pelo index, calculando as coordenadas, removendo os chunks muito distantes do centro e adicionando novos onde não tiver
+# TODO
+- Reuse the arrays when updating the mesh instead of creating a new one every time
+- Cleanup the chunk if there is an error while allocating a new one [world.c]

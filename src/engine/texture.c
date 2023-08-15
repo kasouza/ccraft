@@ -6,8 +6,8 @@
 #include <stb_image.h>
 #include <stdbool.h>
 
-struct CCRAFTE_Texture *CCRAFTE_load_texture(const char *path_to_image) {
-    stbi_set_flip_vertically_on_load(true);
+struct CCRAFTE_Texture *CCRAFTE_load_texture(const char *path_to_image, bool invert) {
+    stbi_set_flip_vertically_on_load(invert);
 
     int width, height, nr_channels;
     unsigned char *data =
@@ -63,6 +63,7 @@ struct CCRAFTE_Texture *CCRAFTE_load_texture(const char *path_to_image) {
 
     return sprite;
 }
+
 
 void CCRAFTE_free_texture(struct CCRAFTE_Texture *sprite) {
     assert(sprite != NULL);

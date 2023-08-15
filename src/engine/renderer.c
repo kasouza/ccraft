@@ -68,7 +68,7 @@ static int setup_glfw() {
 
     glfwMakeContextCurrent(s_window);
 
-    /*glfwSetInputMode(s_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);*/
+    glfwSetInputMode(s_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetFramebufferSizeCallback(s_window, framebuffer_size_callback);
 
     return CCRAFTE_SUCCESS;
@@ -82,6 +82,7 @@ static int setup_gl() {
 
     glCullFace(GL_BACK);
     glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
 
     glViewport(0, 0, s_window_width, s_window_height);
 
@@ -177,7 +178,7 @@ enum CCRAFTE_Error CCRAFTE_init(int window_width, int window_height,
 
 void CCRAFTE_clear() {
     glClearColor(0.1, 0.1, 0.1, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void CCRAFTE_clear_colored(float r, float g, float b, float a) {
@@ -281,11 +282,16 @@ void CCRAFTE_draw_sub_texture(struct CCRAFTE_Texture *sprite, double x,
 }
 
 void CCRAFTE_draw_mesh(struct CCRAFTE_Camera *camera,
-                       struct CCRAFTE_Mesh *mesh) {
+                       struct CCRAFTE_Mesh *mesh,
+                       struct CCRAFTE_TextureArray* texture) {
+    if (mesh->vertices_length <= 0) {
+        return;
+    }
+
     glUseProgram(s_3d_program);
 
     glBindVertexArray(mesh->VAO);
-    /*glBindVertexArray(mesh->VBO);*/
+
 
     union CCRAFTE_Mat4 projection_matrix = CCRAFTE_mat4_perspective(
         s_fov, (float)s_window_width / s_window_height, 0.1f, 100.0f);
@@ -301,6 +307,8 @@ void CCRAFTE_draw_mesh(struct CCRAFTE_Camera *camera,
                        GL_FALSE, view_matrix.data);
     glUniformMatrix4fv(glGetUniformLocation(s_3d_program, "model_matrix"), 1,
                        GL_FALSE, model_matrix.data);
+
+    glBindTexture(GL_TEXTURE_2D_ARRAY, texture->texture);
 
     glDrawArrays(GL_TRIANGLES, 0, mesh->vertices_length);
 

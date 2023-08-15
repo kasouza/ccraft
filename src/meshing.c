@@ -22,58 +22,58 @@ static struct CCRAFTE_Vertex
 
 struct CCRAFTE_Vertex cube_vertices[] = {
     // Bottom face
-    {{{0.0f, 0.0f, 0.0f}}},
-    {{{1.0f, 0.0f, 0.0f}}},
-    {{{1.0f, 0.0f, 1.0f}}},
-
-    {{{0.0f, 0.0f, 0.0f}}},
-    {{{1.0f, 0.0f, 1.0f}}},
-    {{{0.0f, 0.0f, 1.0f}}},
+    {{{0.0f, 0.0f, 1.0f}}, {{1.0f, 0.0f}}, 1.0f},
+    {{{1.0f, 0.0f, 1.0f}}, {{0.0f, 0.0f}}, 1.0f},
+    {{{1.0f, 0.0f, 0.0f}}, {{0.0f, 1.0f}}, 1.0f},
+                                              
+    {{{0.0f, 0.0f, 1.0f}}, {{1.0f, 0.0f}}, 1.0f},
+    {{{1.0f, 0.0f, 0.0f}}, {{0.0f, 1.0f}}, 1.0f},
+    {{{0.0f, 0.0f, 0.0f}}, {{1.0f, 1.0f}}, 1.0f},
 
     // Top face
-    {{{0.0f, 1.0f, 1.0f}}},
-    {{{1.0f, 1.0f, 1.0f}}},
-    {{{1.0f, 1.0f, 0.0f}}},
-
-    {{{0.0f, 1.0f, 1.0f}}},
-    {{{1.0f, 1.0f, 0.0f}}},
-    {{{0.0f, 1.0f, 0.0f}}},
+    {{{0.0f, 1.0f, 0.0f}}, {{1.0f, 0.0f}}, 1.0f},
+    {{{1.0f, 1.0f, 0.0f}}, {{0.0f, 0.0f}}, 1.0f},
+    {{{1.0f, 1.0f, 1.0f}}, {{0.0f, 1.0f}}, 1.0f},
+                                              
+    {{{0.0f, 1.0f, 0.0f}}, {{1.0f, 0.0f}}, 1.0f},
+    {{{1.0f, 1.0f, 1.0f}}, {{0.0f, 1.0f}}, 1.0f},
+    {{{0.0f, 1.0f, 1.0f}}, {{1.0f, 1.0f}}, 1.0f},
 
     // Front face
-    {{{0.0f, 0.0f, 1.0f}}},
-    {{{1.0f, 0.0f, 1.0f}}},
-    {{{1.0f, 1.0f, 1.0f}}},
+    {{{1.0f, 0.0f, 1.0f}}, {{1.0f, 0.0f}}, 0.0f},
+    {{{0.0f, 0.0f, 1.0f}}, {{0.0f, 0.0f}}, 0.0f},
+    {{{0.0f, 1.0f, 1.0f}}, {{0.0f, 1.0f}}, 0.0f},
 
-    {{{0.0f, 0.0f, 1.0f}}},
-    {{{1.0f, 1.0f, 1.0f}}},
-    {{{0.0f, 1.0f, 1.0f}}},
+    {{{1.0f, 0.0f, 1.0f}}, {{1.0f, 0.0f}}, 0.0f},
+    {{{0.0f, 1.0f, 1.0f}}, {{0.0f, 1.0f}}, 0.0f},
+    {{{1.0f, 1.0f, 1.0f}}, {{1.0f, 1.0f}}, 0.0f},
 
     // Back face
-    {{{1.0f, 0.0f, 0.0f}}},
-    {{{0.0f, 0.0f, 0.0f}}},
-    {{{0.0f, 1.0f, 0.0f}}},
-
-    {{{1.0f, 0.0f, 0.0f}}},
-    {{{0.0f, 1.0f, 0.0f}}},
-    {{{1.0f, 1.0f, 0.0f}}},
+    {{{0.0f, 0.0f, 0.0f}}, {{1.0f, 0.0f}}, 1.0f},
+    {{{1.0f, 0.0f, 0.0f}}, {{0.0f, 0.0f}}, 1.0f},
+    {{{1.0f, 1.0f, 0.0f}}, {{0.0f, 1.0f}}, 1.0f},
+                                               
+    {{{0.0f, 0.0f, 0.0f}}, {{1.0f, 0.0f}}, 1.0f},
+    {{{1.0f, 1.0f, 0.0f}}, {{0.0f, 1.0f}}, 1.0f},
+    {{{0.0f, 1.0f, 0.0f}}, {{1.0f, 1.0f}}, 1.0f},
 
     // Left face
-    {{{0.0f, 0.0f, 0.0f}}},
-    {{{0.0f, 0.0f, 1.0f}}},
-    {{{0.0f, 1.0f, 1.0f}}},
-
-    {{{0.0f, 0.0f, 0.0f}}},
-    {{{0.0f, 1.0f, 1.0f}}},
-    {{{0.0f, 1.0f, 0.0f}}},
+    {{{0.0f, 0.0f, 1.0f}}, {{1.0f, 0.0f}}, 0.0f},
+    {{{0.0f, 0.0f, 0.0f}}, {{0.0f, 0.0f}}, 0.0f},
+    {{{0.0f, 1.0f, 0.0f}}, {{0.0f, 1.0f}}, 0.0f},
+                                               
+    {{{0.0f, 0.0f, 1.0f}}, {{1.0f, 0.0f}}, 0.0f},
+    {{{0.0f, 1.0f, 0.0f}}, {{0.0f, 1.0f}}, 0.0f},
+    {{{0.0f, 1.0f, 1.0f}}, {{1.0f, 1.0f}}, 0.0f},
 
     // Right face
-    {{{1.0f, 0.0f, 1.0f}}},
-    {{{1.0f, 0.0f, 0.0f}}},
-    {{{1.0f, 1.0f, 0.0f}}},
-
-    {{{1.0f, 0.0f, 1.0f}}},
-    {{{1.0f, 1.0f, 0.0f}}},
-    {{{1.0f, 1.0f, 1.0f}}},
+    {{{1.0f, 0.0f, 0.0f}}, {{1.0f, 0.0f}}, 0.0f},
+    {{{1.0f, 0.0f, 1.0f}}, {{0.0f, 0.0f}}, 0.0f},
+    {{{1.0f, 1.0f, 1.0f}}, {{0.0f, 1.0f}}, 0.0f},
+                                               
+    {{{1.0f, 0.0f, 0.0f}}, {{1.0f, 0.0f}}, 0.0f},
+    {{{1.0f, 1.0f, 1.0f}}, {{0.0f, 1.0f}}, 0.0f},
+    {{{1.0f, 1.0f, 0.0f}}, {{1.0f, 1.0f}}, 0.0f},
 };
 
 bool is_block_visible(struct CCRAFT_Chunk *chunk, int x, int y, int z) {
@@ -87,7 +87,7 @@ bool is_block_visible(struct CCRAFT_Chunk *chunk, int x, int y, int z) {
     return chunk->voxels[idx].type != CCRAFT_VOXEL_TYPE_AIR;
 }
 
-struct CCRAFTE_Mesh *CCRAFT_create_simple_mesh(struct CCRAFT_Chunk *chunk) {
+void CCRAFT_remesh(struct CCRAFT_Chunk *chunk) {
     size_t vertex_count = 0;
 
     for (int x = 0; x < CCRAFT_CHUNK_SIZE; x++) {
@@ -98,12 +98,22 @@ struct CCRAFTE_Mesh *CCRAFT_create_simple_mesh(struct CCRAFT_Chunk *chunk) {
                 }
 
                 int added_vertices = 0;
+                size_t idx = CCRAFT_CHUNK_INDEX(x, y, z);
 
                 // Bottom
                 if (!is_block_visible(chunk, x, y - 1, z)) {
                     memcpy(meshing_buffer + vertex_count + added_vertices,
-                           cube_vertices + BOTTOM_FACE_INDEX * VERTICES_PER_FACE,
+                           cube_vertices +
+                               BOTTOM_FACE_INDEX * VERTICES_PER_FACE,
                            sizeof(struct CCRAFTE_Vertex) * VERTICES_PER_FACE);
+
+                    for (int i = 0; i < 6; i++) {
+                        meshing_buffer[vertex_count + added_vertices + i].position.x += x;
+                        meshing_buffer[vertex_count + added_vertices + i].position.y += y;
+                        meshing_buffer[vertex_count + added_vertices + i].position.z += z;
+                        meshing_buffer[vertex_count + added_vertices + i].texture_array_index = CCRAFT_voxel_types[chunk->voxels[idx].type].texture_indices[CCRAFT_SIDE_BOTTOM];
+                    }
+
                     added_vertices += VERTICES_PER_FACE;
                 }
 
@@ -112,7 +122,16 @@ struct CCRAFTE_Mesh *CCRAFT_create_simple_mesh(struct CCRAFT_Chunk *chunk) {
                     memcpy(meshing_buffer + vertex_count + added_vertices,
                            cube_vertices + TOP_FACE_INDEX * VERTICES_PER_FACE,
                            sizeof(struct CCRAFTE_Vertex) * VERTICES_PER_FACE);
+
+                    for (int i = 0; i < 6; i++) {
+                        meshing_buffer[vertex_count + added_vertices + i].position.x += x;
+                        meshing_buffer[vertex_count + added_vertices + i].position.y += y;
+                        meshing_buffer[vertex_count + added_vertices + i].position.z += z;
+                        meshing_buffer[vertex_count + added_vertices + i].texture_array_index = CCRAFT_voxel_types[chunk->voxels[idx].type].texture_indices[CCRAFT_SIDE_TOP];
+                    }
+
                     added_vertices += VERTICES_PER_FACE;
+
                 }
 
                 // Left
@@ -120,6 +139,14 @@ struct CCRAFTE_Mesh *CCRAFT_create_simple_mesh(struct CCRAFT_Chunk *chunk) {
                     memcpy(meshing_buffer + vertex_count + added_vertices,
                            cube_vertices + LEFT_FACE_INDEX * VERTICES_PER_FACE,
                            sizeof(struct CCRAFTE_Vertex) * VERTICES_PER_FACE);
+
+                    for (int i = 0; i < 6; i++) {
+                        meshing_buffer[vertex_count + added_vertices + i].position.x += x;
+                        meshing_buffer[vertex_count + added_vertices + i].position.y += y;
+                        meshing_buffer[vertex_count + added_vertices + i].position.z += z;
+                        meshing_buffer[vertex_count + added_vertices + i].texture_array_index = CCRAFT_voxel_types[chunk->voxels[idx].type].texture_indices[CCRAFT_SIDE_LEFT];
+                    }
+
                     added_vertices += VERTICES_PER_FACE;
                 }
 
@@ -128,6 +155,13 @@ struct CCRAFTE_Mesh *CCRAFT_create_simple_mesh(struct CCRAFT_Chunk *chunk) {
                     memcpy(meshing_buffer + vertex_count + added_vertices,
                            cube_vertices + RIGHT_FACE_INDEX * VERTICES_PER_FACE,
                            sizeof(struct CCRAFTE_Vertex) * VERTICES_PER_FACE);
+                    for (int i = 0; i < 6; i++) {
+                        meshing_buffer[vertex_count + added_vertices + i].position.x += x;
+                        meshing_buffer[vertex_count + added_vertices + i].position.y += y;
+                        meshing_buffer[vertex_count + added_vertices + i].position.z += z;
+                        meshing_buffer[vertex_count + added_vertices + i].texture_array_index = CCRAFT_voxel_types[chunk->voxels[idx].type].texture_indices[CCRAFT_SIDE_RIGHT];
+                    }
+
                     added_vertices += VERTICES_PER_FACE;
                 }
 
@@ -136,7 +170,16 @@ struct CCRAFTE_Mesh *CCRAFT_create_simple_mesh(struct CCRAFT_Chunk *chunk) {
                     memcpy(meshing_buffer + vertex_count + added_vertices,
                            cube_vertices + BACK_FACE_INDEX * VERTICES_PER_FACE,
                            sizeof(struct CCRAFTE_Vertex) * VERTICES_PER_FACE);
+
+                    for (int i = 0; i < 6; i++) {
+                        meshing_buffer[vertex_count + added_vertices + i].position.x += x;
+                        meshing_buffer[vertex_count + added_vertices + i].position.y += y;
+                        meshing_buffer[vertex_count + added_vertices + i].position.z += z;
+                        meshing_buffer[vertex_count + added_vertices + i].texture_array_index = CCRAFT_voxel_types[chunk->voxels[idx].type].texture_indices[CCRAFT_SIDE_BACK];
+                    }
+
                     added_vertices += VERTICES_PER_FACE;
+
                 }
 
                 // Front
@@ -144,15 +187,15 @@ struct CCRAFTE_Mesh *CCRAFT_create_simple_mesh(struct CCRAFT_Chunk *chunk) {
                     memcpy(meshing_buffer + vertex_count + added_vertices,
                            cube_vertices + FRONT_FACE_INDEX * VERTICES_PER_FACE,
                            sizeof(struct CCRAFTE_Vertex) * VERTICES_PER_FACE);
-                    added_vertices += VERTICES_PER_FACE;
-                }
 
-                /*memcpy(meshing_buffer + vertex_count, cube_vertices,*/
-                       /*sizeof(cube_vertices));*/
-                for (int i = 0; i < added_vertices; i++) {
-                    meshing_buffer[vertex_count + i].position.x += x;
-                    meshing_buffer[vertex_count + i].position.y += y;
-                    meshing_buffer[vertex_count + i].position.z += z;
+                    for (int i = 0; i < 6; i++) {
+                        meshing_buffer[vertex_count + added_vertices + i].position.x += x;
+                        meshing_buffer[vertex_count + added_vertices + i].position.y += y;
+                        meshing_buffer[vertex_count + added_vertices + i].position.z += z;
+                        meshing_buffer[vertex_count + added_vertices + i].texture_array_index = CCRAFT_voxel_types[chunk->voxels[idx].type].texture_indices[CCRAFT_SIDE_FRONT];
+                    }
+
+                    added_vertices += VERTICES_PER_FACE;
                 }
 
                 vertex_count += added_vertices;
@@ -160,5 +203,5 @@ struct CCRAFTE_Mesh *CCRAFT_create_simple_mesh(struct CCRAFT_Chunk *chunk) {
         }
     }
 
-    return CCRAFTE_create_mesh_from_vertices(meshing_buffer, vertex_count);
+    CCRAFTE_mesh_update(chunk->mesh, meshing_buffer, vertex_count);
 }

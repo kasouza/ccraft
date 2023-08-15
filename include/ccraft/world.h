@@ -9,12 +9,16 @@ struct CCRAFT_World {
     union CCRAFTE_Vec3i position;
     union CCRAFTE_Vec3i size;
 
-    struct KLIB_LinkedList *chunks;
+    struct CCRAFT_Chunk **chunks;
 };
 
-struct CCRAFT_World *CCRAFT_create_world(union CCRAFTE_Vec3i position, union CCRAFTE_Vec3i size);
+struct CCRAFT_World *CCRAFT_create_world(union CCRAFTE_Vec3i position,
+                                         union CCRAFTE_Vec3i size);
 void CCRAFT_free_world(struct CCRAFT_World *world);
 
-void CCRAFTE_world_move_to(struct CCRAFT_World* world, union CCRAFTE_Vec3i new_world_pos);
+void CCRAFTE_world_move_to(struct CCRAFT_World *world,
+                           union CCRAFTE_Vec3i new_world_pos);
+
+void CCRAFT_world_update_dirty_chunks(struct CCRAFT_World* world);
 
 #endif

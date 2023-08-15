@@ -8,13 +8,16 @@ set(SOURCES
 	engine/input.c
 	engine/renderer.c
 	engine/shaders.c
-	engine/texture.c
 	engine/utils.c
     engine/mat4.c
     engine/vec3.c
     engine/vec3i.c
     engine/quaternion.c
+	engine/texture.c
+	engine/texture_array.c
     engine/utils.c
+    voxel_type.c
+    chunk.c
     meshing.c
     main.c
     world.c
