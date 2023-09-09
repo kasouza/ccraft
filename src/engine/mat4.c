@@ -98,11 +98,11 @@ union CCRAFTE_Mat4 CCRAFTE_mat4_rotation(float x, float y, float z) {
 union CCRAFTE_Mat4 CCRAFTE_mat4_perspective(float fov, float aspect_ratio,
                                             float near, float far) {
     float tan_half_alpha = tanf(fov / 2.0f);
-    float n = 1 / tan_half_alpha;
+    float d = 1 / tan_half_alpha;
 
-    union CCRAFTE_Mat4 mat = {{n / aspect_ratio, 0, 0, 0,
+    union CCRAFTE_Mat4 mat = {{d / aspect_ratio, 0, 0, 0,
 
-                               0, n, 0, 0,
+                               0, d, 0, 0,
 
                                0, 0, (-near - far) / (near - far), 1,
 
@@ -148,10 +148,12 @@ CCRAFTE_mat4_rotation_from_quaternion(union CCRAFTE_Quaternion q) {
 
 union CCRAFTE_Mat4
 CCRAFTE_mat4_view_from_camera(struct CCRAFTE_Camera *camera) {
-    union CCRAFTE_Vec3 target = CCRAFTE_vec3_direction(camera->yaw, camera->pitch);
+    union CCRAFTE_Vec3 target =
+        CCRAFTE_vec3_direction(camera->yaw, camera->pitch);
 
     union CCRAFTE_Vec3 D = CCRAFTE_vec3_normalize(target);
-    union CCRAFTE_Vec3 R = CCRAFTE_vec3_normalize(CCRAFTE_vec3_cross(target, camera->world_up));
+    union CCRAFTE_Vec3 R =
+        CCRAFTE_vec3_normalize(CCRAFTE_vec3_cross(target, camera->world_up));
     union CCRAFTE_Vec3 U = CCRAFTE_vec3_normalize(CCRAFTE_vec3_cross(R, D));
 
     union CCRAFTE_Mat4 translation = {{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
@@ -159,12 +161,7 @@ CCRAFTE_mat4_view_from_camera(struct CCRAFTE_Camera *camera) {
                                        -camera->position.z, 1}};
 
     union CCRAFTE_Mat4 mat = {
-        {
-            R.x, U.x, D.x, 0,
-            R.y, U.y, D.y, 0,
-            R.z, U.z, D.z, 0,
-            0, 0, 0, 1
-        },
+        {R.x, U.x, D.x, 0, R.y, U.y, D.y, 0, R.z, U.z, D.z, 0, 0, 0, 0, 1},
     };
 
     return CCRAFTE_mat4_multiply_mat4(&mat, &translation);

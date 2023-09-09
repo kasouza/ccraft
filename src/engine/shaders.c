@@ -99,6 +99,32 @@ const char *CCRAFTE_3d_fragment_shader =
             "discard;"
         "}"
     "}";
+
+const char *CCRAFTE_debug_vertex_shader =
+    "#version 330 core\n"
+
+    "layout (location = 0) in vec3 a_pos;"
+
+    "uniform float scale;"
+    "uniform vec3 translation;"
+    "uniform mat4 view_matrix;"
+    "uniform mat4 projection_matrix;"
+
+    "void main() {"
+        "gl_Position = projection_matrix * view_matrix * vec4(a_pos * scale + translation, 1.0);"
+    "}";
+
+const char *CCRAFTE_debug_fragment_shader =
+    "#version 330 core\n"
+
+    "uniform vec4 u_color;"
+
+    "out vec4 frag_color;"
+    
+    "void main() {"
+        "frag_color = u_color;"
+    "}";
+
 // clang-format on
 
 GLuint CCRAFTE_load_shader_from_file(const char *path, GLenum shader_type) {

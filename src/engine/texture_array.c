@@ -61,6 +61,8 @@ CCRAFTE_create_texture_array(GLsizei width, GLsizei height,
 
 int CCRAFTE_texture_array_add_texture(
     struct CCRAFTE_TextureArray *texture_array, const char *file) {
+    stbi_set_flip_vertically_on_load(true);
+
     assert(texture_array != NULL);
     assert(texture_array->texture_count < texture_array->max_textures &&
            "max number of textures reached");

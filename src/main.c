@@ -15,9 +15,10 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
-#define RENDER_DISTANCE 4
+#define RENDER_DISTANCE 1
 #define WORLD_SIZE 2 * RENDER_DISTANCE + 1
 
 void handle_camera_controls(struct CCRAFTE_Camera *camera,
@@ -49,9 +50,9 @@ void handle_camera_controls(struct CCRAFTE_Camera *camera,
     }
 
     union CCRAFTE_Vec3i camera_world_pos = {
-        .x = camera->position.x / CCRAFT_CHUNK_SIZE,
-        .y = camera->position.y / CCRAFT_CHUNK_SIZE,
-        .z = camera->position.z / CCRAFT_CHUNK_SIZE,
+        .x = floor(camera->position.x / CCRAFT_CHUNK_SIZE),
+        .y = floor(camera->position.y / CCRAFT_CHUNK_SIZE),
+        .z = floor(camera->position.z / CCRAFT_CHUNK_SIZE),
     };
 
     union CCRAFTE_Vec3i world_center_offset = {
@@ -106,10 +107,12 @@ int main() {
 
     union CCRAFTE_Vec3i world_pos =
         CCRAFTE_vec3i_subtract(camera_world_pos, world_center_offset);
+    /*world_pos.x = -1;*/
+    /*world_pos.y = 0;*/
+    /*world_pos.z = 0;*/
 
     struct CCRAFT_World *world = CCRAFT_create_world(
-        world_pos,
-        (union CCRAFTE_Vec3i){{WORLD_SIZE, WORLD_SIZE, WORLD_SIZE}});
+        world_pos, (union CCRAFTE_Vec3i){{WORLD_SIZE, WORLD_SIZE, WORLD_SIZE}});
     if (world == NULL) {
         return 1;
     }
@@ -149,11 +152,18 @@ int main() {
                         (world->position.y + y) * CCRAFT_CHUNK_SIZE;
                     mesh->transform.translation.z =
                         (world->position.z + z) * CCRAFT_CHUNK_SIZE;
+                    mesh->transform.scale.x = .75;
+                    mesh->transform.scale.y = .75;
+                    mesh->transform.scale.z = .75;
 
                     CCRAFTE_draw_mesh(&camera, mesh, tex_array);
+                    /*printf("%d\n", mesh->VAO);*/
                 }
             }
         }
+
+        /*printf("\n");*/
+        CCRAFTE_draw_debug(&camera);
 
         CCRAFTE_present();
 

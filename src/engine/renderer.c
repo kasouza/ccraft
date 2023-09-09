@@ -30,9 +30,19 @@ static enum CCRAFTE_InitFlags s_flags = 0;
 static GLFWwindow *s_window = NULL;
 static GLuint s_sprite_program = 0;
 static GLuint s_3d_program = 0;
+static GLuint s_debug_program = 0;
 
 static GLuint s_rect_vao = 0;
 static GLuint s_rect_vbo = 0;
+
+static GLuint s_line_z_vao = 0;
+static GLuint s_line_z_vbo = 0;
+
+static GLuint s_line_x_vao = 0;
+static GLuint s_line_x_vbo = 0;
+
+static GLuint s_line_y_vao = 0;
+static GLuint s_line_y_vbo = 0;
 
 static int s_window_width = 1024;
 static int s_window_height = 600;
@@ -117,6 +127,65 @@ static enum CCRAFTE_Error setup_buffers() {
 
     glBindVertexArray(0);
 
+
+    // Lines
+    float line_z_vertices[] = {
+        0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,
+    };
+
+    glGenVertexArrays(1, &s_line_z_vao);
+    glGenBuffers(1, &s_line_z_vbo);
+
+    glBindVertexArray(s_line_z_vao);
+    glBindBuffer(GL_ARRAY_BUFFER, s_line_z_vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(line_z_vertices), line_z_vertices,
+                 GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3,
+                          (void *)0);
+    glEnableVertexAttribArray(0);
+
+    glBindVertexArray(0);
+
+    float line_x_vertices[] = {
+        0.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f,
+    };
+
+    glGenVertexArrays(1, &s_line_x_vao);
+    glGenBuffers(1, &s_line_x_vbo);
+
+    glBindVertexArray(s_line_x_vao);
+    glBindBuffer(GL_ARRAY_BUFFER, s_line_x_vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(line_x_vertices), line_x_vertices,
+                 GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3,
+                          (void *)0);
+    glEnableVertexAttribArray(0);
+
+    glBindVertexArray(0);
+
+    float line_y_vertices[] = {
+        0.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+    };
+
+    glGenVertexArrays(1, &s_line_y_vao);
+    glGenBuffers(1, &s_line_y_vbo);
+
+    glBindVertexArray(s_line_y_vao);
+    glBindBuffer(GL_ARRAY_BUFFER, s_line_y_vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(line_y_vertices), line_y_vertices,
+                 GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3,
+                          (void *)0);
+    glEnableVertexAttribArray(0);
+
+    glBindVertexArray(0);
+
     return CCRAFTE_SUCCESS;
 }
 
@@ -135,14 +204,12 @@ static enum CCRAFTE_Error setup_programs() {
         return CCRAFTE_ERROR_PROGRAM_CREATION;
     }
 
-    glDeleteShader(sprite_vertex);
-    glDeleteShader(sprite_fragment);
-
     // 3d shaders
     GLuint vertex_3d =
         CCRAFTE_load_shader(CCRAFTE_3d_vertex_shader, GL_VERTEX_SHADER);
     GLuint fragment_3d =
         CCRAFTE_load_shader(CCRAFTE_3d_fragment_shader, GL_FRAGMENT_SHADER);
+
     if (!vertex_3d || !fragment_3d) {
         return CCRAFTE_ERROR_SHADER_COMPILATION;
     }
@@ -152,8 +219,26 @@ static enum CCRAFTE_Error setup_programs() {
         return CCRAFTE_ERROR_PROGRAM_CREATION;
     }
 
+    // Debug shaders
+    GLuint vertex_debug =
+        CCRAFTE_load_shader(CCRAFTE_debug_vertex_shader, GL_VERTEX_SHADER);
+    GLuint fragment_debug =
+        CCRAFTE_load_shader(CCRAFTE_debug_fragment_shader, GL_FRAGMENT_SHADER);
+
+    s_debug_program = CCRAFTE_create_program(vertex_debug, fragment_debug);
+    if (!s_debug_program) {
+        return CCRAFTE_ERROR_PROGRAM_CREATION;
+    }
+
+    glDeleteShader(sprite_vertex);
+    glDeleteShader(sprite_fragment);
+
     glDeleteShader(vertex_3d);
     glDeleteShader(fragment_3d);
+
+    glDeleteShader(vertex_debug);
+    glDeleteShader(fragment_debug);
+
 
     return CCRAFTE_SUCCESS;
 }
@@ -213,10 +298,15 @@ void CCRAFTE_terminate() {
     if (!init) {
         return;
     }
-
     // Programs
     glDeleteProgram(s_sprite_program);
     s_sprite_program = 0;
+
+    glDeleteProgram(s_3d_program);
+    s_3d_program = 0;
+
+    glDeleteProgram(s_debug_program);
+    s_debug_program = 0;
 
     // VAOs and VBOs
     glDeleteVertexArrays(1, &s_rect_vao);
@@ -281,6 +371,52 @@ void CCRAFTE_draw_sub_texture(struct CCRAFTE_Texture *sprite, double x,
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
+void CCRAFTE_draw_debug(struct CCRAFTE_Camera *camera) {
+    glUseProgram(s_debug_program);
+
+    union CCRAFTE_Mat4 projection_matrix = CCRAFTE_mat4_perspective(
+        s_fov, (float)s_window_width / s_window_height, 0.1f, 100.0f);
+
+    union CCRAFTE_Mat4 view_matrix = CCRAFTE_mat4_view_from_camera(camera);
+
+    glUniformMatrix4fv(glGetUniformLocation(s_debug_program, "projection_matrix"),
+                       1, GL_FALSE, projection_matrix.data);
+    glUniformMatrix4fv(glGetUniformLocation(s_debug_program, "view_matrix"), 1,
+                       GL_FALSE, view_matrix.data);
+
+
+    glLineWidth(2);
+    union CCRAFTE_Vec3 camera_dir = CCRAFTE_vec3_direction(camera->yaw, camera->pitch);
+    union CCRAFTE_Vec3 translation =  {
+        .x = camera->position.x + camera_dir.x,
+        .y = camera->position.y + camera_dir.y,
+        .z = camera->position.z + camera_dir.z,
+    };
+
+    glUniform3fv(glGetUniformLocation(s_debug_program, "translation"), 1, translation.data);
+    glUniform1f(glGetUniformLocation(s_debug_program, "scale"), 0.1);
+
+    {
+        glUniform4f(glGetUniformLocation(s_debug_program, "u_color"), 1, 0, 0, 1);
+        glBindVertexArray(s_line_x_vao);
+        glDrawArrays(GL_LINES, 0, 2);
+    }
+
+    {
+        glUniform4f(glGetUniformLocation(s_debug_program, "u_color"), 0, 1, 0, 1);
+        glBindVertexArray(s_line_y_vao);
+        glDrawArrays(GL_LINES, 0, 2);
+    }
+
+    {
+        glUniform4f(glGetUniformLocation(s_debug_program, "u_color"), 0, 0, 1, 1);
+        glBindVertexArray(s_line_z_vao);
+        glDrawArrays(GL_LINES, 0, 2);
+    }
+
+    glLineWidth(1);
+}
+
 void CCRAFTE_draw_mesh(struct CCRAFTE_Camera *camera,
                        struct CCRAFTE_Mesh *mesh,
                        struct CCRAFTE_TextureArray* texture) {
@@ -291,7 +427,6 @@ void CCRAFTE_draw_mesh(struct CCRAFTE_Camera *camera,
     glUseProgram(s_3d_program);
 
     glBindVertexArray(mesh->VAO);
-
 
     union CCRAFTE_Mat4 projection_matrix = CCRAFTE_mat4_perspective(
         s_fov, (float)s_window_width / s_window_height, 0.1f, 100.0f);

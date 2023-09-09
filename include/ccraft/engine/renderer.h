@@ -24,6 +24,8 @@ void CCRAFTE_draw_mesh(struct CCRAFTE_Camera *camera,
                        struct CCRAFTE_Mesh *mesh,
                        struct CCRAFTE_TextureArray* texture);
 
+void CCRAFTE_draw_debug(struct CCRAFTE_Camera *camera);
+
 void CCRAFTE_draw_texture(struct CCRAFTE_Texture *sprite, double x, double y, double width,
                      double height, double rotation, double pivot_x,
                      double pivot_y);

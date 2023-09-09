@@ -27,7 +27,7 @@ void CCRAFT_free_chunk(struct CCRAFT_Chunk* chunk) {
     assert(chunk != NULL);
 
     if (chunk->mesh != NULL) {
-        free(chunk->mesh);
+        CCRAFTE_free_mesh(chunk->mesh);
         chunk->mesh = NULL;
     }
 

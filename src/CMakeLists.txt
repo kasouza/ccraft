@@ -16,6 +16,7 @@ set(SOURCES
 	engine/texture.c
 	engine/texture_array.c
     engine/utils.c
+    engine/transform.c
     voxel_type.c
     chunk.c
     meshing.c

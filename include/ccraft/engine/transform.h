@@ -10,5 +10,7 @@ struct CCRAFTE_Transform {
     union CCRAFTE_Quaternion rotation;
 };
 
+struct CCRAFTE_Transform CCRAFTE_create_transform();
+
 #endif
 

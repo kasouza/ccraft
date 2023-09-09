@@ -13,9 +13,7 @@ struct CCRAFTE_Mesh *CCRAFTE_create_mesh_uninitialized_vertices() {
         return NULL;
     }
 
-    mesh->transform.scale.x = 1;
-    mesh->transform.scale.y = 1;
-    mesh->transform.scale.z = 1;
+    mesh->transform = CCRAFTE_create_transform();
 
     mesh->vertices = NULL;
     mesh->indices = NULL;
